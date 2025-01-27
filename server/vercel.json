@@ -1,20 +1,40 @@
 {
   "version": 2,
   "builds": [
-      {
-          "src": "server.js",
-          "use": "@vercel/node",
-          "config": {
-              "includeFiles": [
-                  "dist/**"
-              ]
-          }
+    {
+      "src": "server.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "dist/**",
+          "config/**",
+          "models/**"
+        ]
       }
+    }
   ],
+  "functions": {
+    "api/test.js": {
+      "maxDuration": 30
+    },
+    "api/server.js": {
+      "memory": 1024
+    },
+    "api/*.js": {
+      "maxDuration": 15
+    },
+    "src/api/*.js": {
+      "maxDuration": 25
+    }
+  },
   "routes": [
-      {
-          "src": "/(.*)",
-          "dest": "server.js"
-      }
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "server.js"
+    }
   ]
 }
